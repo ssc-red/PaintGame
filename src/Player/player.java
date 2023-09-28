@@ -134,6 +134,9 @@ public class player {
     public void draw(Graphics2D g2) {
     	g2.setColor(color);
         g2.fillOval(screenX, screenY, width, height);
+
+		g2.fillRect(x-screenX, 0, screenX, gp.screenHeight);
+		g2.fillRect(x+platformW, 0, screenX, gp.screenHeight);
     	
         if(y<gp.screenHeight) {
         	g2.setColor(new Color(144, 238, 144));

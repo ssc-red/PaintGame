@@ -20,6 +20,8 @@ public class Paint {
 	int type;
 	
 	Random rand = new Random();
+
+	int seperation = 5;
 	
 	Paint(int type, player player){
 		this.type = type;
@@ -40,24 +42,24 @@ public class Paint {
 			}
 			this.jumpsGiven = 1;
 		}
-		this.randY = (rand.nextInt(200)+100)+player.y;
+		this.randY = (rand.nextInt(400)+100)+player.y;
 		this.randX = rand.nextInt(4); 
 		
 		switch(this.randX){
 		case 0:
-			this.randX = rand.nextInt(player.platformW/4);
+			this.randX = rand.nextInt(player.platformW/seperation);
 			break;
 		case 1:
-			this.randX = rand.nextInt(player.platformW/4)+1400/5;
+			this.randX = rand.nextInt(player.platformW/seperation)+1400/seperation;
 			break;
 		case 2:
-			this.randX = rand.nextInt(player.platformW/4)+2*1400/5;
+			this.randX = rand.nextInt(player.platformW/seperation)+2*1400/seperation;
 			break;
 		case 3:
-			this.randX = rand.nextInt(player.platformW/4)+3*1400/5;
+			this.randX = rand.nextInt(player.platformW/seperation)+3*1400/seperation;
 			break;
 		case 4:
-			this.randX = rand.nextInt(player.platformW/4)+4*1400/5-player.width;
+			this.randX = rand.nextInt(player.platformW/seperation)+4*1400/seperation-player.width;
 			break;
 		}
 		

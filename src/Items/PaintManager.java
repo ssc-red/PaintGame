@@ -22,7 +22,7 @@ public class PaintManager {
 		
 		paint = new ArrayList<Paint>();
 		
-		paintFrequency = 3; 
+		paintFrequency = 10; 
 		
 	}
 	public void update() {
@@ -43,13 +43,15 @@ public class PaintManager {
 					break;
 				}
 			}
-			if(p.bottom<player.screenY) {
+			if(p.bottom>player.screenY) {
 				paintsAbove++;
 			}
 		}
-		while(paintsAbove<paintFrequency) {
+		System.out.println(paint.size()-paintsAbove);
+		while(paint.size()-paintsAbove<paintFrequency) {
 			paint.add(new Paint(1, player));
-			paintsAbove++;
+			paintsAbove--;
+			System.out.println("hello");
 		}
 	}
 	public void draw(Graphics2D g2) {
