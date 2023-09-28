@@ -13,7 +13,7 @@ public class PaintManager {
 	GamePanel gp;
 	player player;
 	
-	int paintsAbove = 0;
+	int paintsBelow = 0;
 	int paintFrequency;
 	
 	public PaintManager(GamePanel gp, player player) {
@@ -26,7 +26,7 @@ public class PaintManager {
 		
 	}
 	public void update() {
-		paintsAbove = 0;
+		paintsBelow = 0;
 		for(Paint p : paint) {
 			p.x = player.x+p.randX;
 			p.y = player.y-p.randY;
@@ -44,14 +44,12 @@ public class PaintManager {
 				}
 			}
 			if(p.bottom>player.screenY) {
-				paintsAbove++;
+				paintsBelow++;
 			}
 		}
-		System.out.println(paint.size()-paintsAbove);
-		while(paint.size()-paintsAbove<paintFrequency) {
+		while(paint.size()-paintsBelow<paintFrequency) {
 			paint.add(new Paint(1, player));
-			paintsAbove--;
-			System.out.println("hello");
+			paintsBelow--;
 		}
 	}
 	public void draw(Graphics2D g2) {

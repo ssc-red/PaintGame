@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable{
 	KeyHandler keyH = new KeyHandler();
 	
 	public player player = new player(this, keyH);
-	PaintManager paintM = new PaintManager(this, player);
+	public PaintManager paintM = new PaintManager(this, player);
 	background backG = new background(this, 0);
 	
 	public GamePanel() {
@@ -72,6 +72,7 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void update() {
+		backG.update();
 		player.update();
 		paintM.update();
 	}
@@ -81,6 +82,7 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		Graphics2D g2 = (Graphics2D)g;
 		
+		backG.draw(g2);
 		paintM.draw(g2);
 		player.draw(g2);
 		

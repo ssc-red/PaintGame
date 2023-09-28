@@ -122,11 +122,13 @@ public class player {
     	else if(y<gp.screenHeight/2 + height/2){
     		y = gp.screenHeight/2 + height/2;
     		gravity = 0;
+			gp.paintM.paint.clear();
     		jump = false;
     		jumps = jumpsBegin;
     	}
     	else if(y==gp.screenHeight/2 + height/2) {
     		gravity = 0;
+			gp.paintM.paint.clear();
     		jump = false;
     		jumps = jumpsBegin;
     	}
@@ -134,6 +136,8 @@ public class player {
     public void draw(Graphics2D g2) {
     	g2.setColor(color);
         g2.fillOval(screenX, screenY, width, height);
+
+		g2.setColor(Color.black);
 
 		g2.fillRect(x-screenX, 0, screenX, gp.screenHeight);
 		g2.fillRect(x+platformW, 0, screenX, gp.screenHeight);
