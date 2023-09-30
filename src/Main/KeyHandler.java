@@ -19,6 +19,12 @@ public class KeyHandler implements KeyListener{
         if(code == KeyEvent.VK_D){
             rightPressed = true;
         }
+        if(code == KeyEvent.VK_LEFT){
+            leftPressed = true;
+        }
+        if(code == KeyEvent.VK_RIGHT){
+            rightPressed = true;
+        }
     }
 
     @Override
@@ -31,6 +37,12 @@ public class KeyHandler implements KeyListener{
             leftPressed = false;
         }
         if(code == KeyEvent.VK_D){
+            rightPressed = false;
+        }
+        if(code == KeyEvent.VK_LEFT){
+            leftPressed = false;
+        }
+        if(code == KeyEvent.VK_RIGHT){
             rightPressed = false;
         }
     }

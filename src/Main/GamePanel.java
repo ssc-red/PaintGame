@@ -24,11 +24,11 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public player player = new player(this, keyH);
 	public PaintManager paintM = new PaintManager(this, player);
-	background backG = new background(this, 0);
+	public background backG = new background(this, 2);
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));;
-		this.setBackground(new Color(137, 207, 240));
+		this.setBackground(Color.BLACK);
 		this.setDoubleBuffered(true);
 		this.addKeyListener(keyH);
 		this.setFocusable(true);

@@ -2,6 +2,14 @@ package Player;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
+import org.xml.sax.SAXException;
 
 import Main.GamePanel;
 import Main.KeyHandler;
@@ -28,14 +36,27 @@ public class player {
 	int jumpsBegin;
     String jumpD;
     boolean released = true;
-    
-    public Color color;
+
+	public ArrayList<String> color = new ArrayList<String>();
+
+	BufferedImage playerWhite, playerRed, playerBlue, playerYellow;
+
+	BufferedImage redPaintSplash, redPaintSplashLeft, redPaintSplashRight;
+	BufferedImage bluePaintSplash, bluePaintSplashLeft, bluePaintSplashRight;
+	BufferedImage yellowPaintSplash, yellowPaintSplashLeft, yellowPaintSplashRight;
+
+	public BufferedImage redPaintBall1, redPaintBall2, redPaintBall3, redPaintBall4, redPaintBall5;
+	public BufferedImage bluePaintBall1, bluePaintBall2, bluePaintBall3, bluePaintBall4, bluePaintBall5;
+	public BufferedImage yellowPaintBall1, yellowPaintBall2, yellowPaintBall3, yellowPaintBall4, yellowPaintBall5;
+
+	public ArrayList<PaintSplash> paintSplashs = new ArrayList<PaintSplash>();
     
     public player(GamePanel gp, KeyHandler keyH) {
     	this.gp = gp;
     	this.keyH = keyH;
     	
     	getDefaultValues();
+		loadImages();
         
         screenX = gp.screenWidth/2 - width/2;
         screenY = gp.screenHeight/2 - height/2;
@@ -80,8 +101,48 @@ public class player {
         bottom = gp.screenHeight/2 - height/2+height+10;
         
         //color
-        color = Color.white;
+        color.add("white");
     }
+	public void loadImages(){
+		try {
+			playerWhite = ImageIO.read(new File("src/res/paperball.png"));
+			playerRed = ImageIO.read(new File("src/res/paperballRed.png"));
+			playerBlue = ImageIO.read(new File("src/res/paperballBlue.png"));
+			playerYellow = ImageIO.read(new File("src/res/paperballYellow.png"));
+			
+			redPaintSplash = ImageIO.read(new File("src/res/PaintSplash/redPaintSplash.png"));
+			redPaintSplashLeft = ImageIO.read(new File("src/res/PaintSplash/redPaintSplashLeft.png"));
+			redPaintSplashRight = ImageIO.read(new File("src/res/PaintSplash/redPaintSplashRight.png"));
+
+			bluePaintSplash = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplash.png"));
+			bluePaintSplashLeft = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplashLeft.png"));
+			bluePaintSplashRight = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplashRight.png"));
+
+			yellowPaintSplash = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplash.png"));
+			yellowPaintSplashLeft = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplashLeft.png"));
+			yellowPaintSplashRight = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplashRight.png"));
+
+			redPaintBall1 = ImageIO.read(new File("src/res/paintballs/redPaintBall1.png"));
+			redPaintBall2 = ImageIO.read(new File("src/res/paintballs/redPaintBall2.png"));
+			redPaintBall3 = ImageIO.read(new File("src/res/paintballs/redPaintBall3.png"));
+			redPaintBall4 = ImageIO.read(new File("src/res/paintballs/redPaintBall4.png"));
+			redPaintBall5 = ImageIO.read(new File("src/res/paintballs/redPaintBall5.png"));
+
+			bluePaintBall1 = ImageIO.read(new File("src/res/paintballs/bluePaintBall1.png"));
+			bluePaintBall2 = ImageIO.read(new File("src/res/paintballs/bluePaintBall2.png"));
+			bluePaintBall3 = ImageIO.read(new File("src/res/paintballs/bluePaintBall3.png"));
+			bluePaintBall4 = ImageIO.read(new File("src/res/paintballs/bluePaintBall4.png"));
+			bluePaintBall5 = ImageIO.read(new File("src/res/paintballs/bluePaintBall5.png"));		
+			
+			yellowPaintBall1 = ImageIO.read(new File("src/res/paintballs/yellowPaintBall1.png"));
+			yellowPaintBall2 = ImageIO.read(new File("src/res/paintballs/yellowPaintBall2.png"));
+			yellowPaintBall3 = ImageIO.read(new File("src/res/paintballs/yellowPaintBall3.png"));
+			yellowPaintBall4 = ImageIO.read(new File("src/res/paintballs/yellowPaintBall4.png"));
+			yellowPaintBall5 = ImageIO.read(new File("src/res/paintballs/yellowPaintBall5.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
     public void update() {
     	//Jump
     	if(keyH.spacePressed==true && released==true && jumps>0) {
@@ -89,6 +150,18 @@ public class player {
     		gravity = 0;
     		released = false;
     		jumps--;
+			if(keyH.rightPressed==true) {
+        		paintSplashs.add(new PaintSplash("left", gp));
+        	}
+        	else if(keyH.leftPressed==true) {
+        		paintSplashs.add(new PaintSplash("right", gp));
+        	}
+			else{
+				paintSplashs.add(new PaintSplash("down", gp));
+			}
+			if(color.size()>1){
+				color.remove(color.get(color.size()-1));
+			}
     	}
     	else if(keyH.spacePressed==false) {
     		released = true;
@@ -115,35 +188,32 @@ public class player {
     	}
     	
     	//Gravity
-    	if(y>gp.screenHeight/2 + height/2) {
+    	if(y-gravity>gp.screenHeight/2 + height/2) {
     		y -= gravity;
     		gravity += gravityIncrease;
     	}
+		else if(y>gp.screenHeight/2 + height/2){
+			y -= y-gravity;
+		}
     	else if(y<gp.screenHeight/2 + height/2){
     		y = gp.screenHeight/2 + height/2;
     		gravity = 0;
 			gp.paintM.paint.clear();
+			paintSplashs.clear();
     		jump = false;
     		jumps = jumpsBegin;
     	}
     	else if(y==gp.screenHeight/2 + height/2) {
     		gravity = 0;
 			gp.paintM.paint.clear();
+			paintSplashs.clear();
     		jump = false;
     		jumps = jumpsBegin;
     	}
     }
     public void draw(Graphics2D g2) {
-    	g2.setColor(color);
-        g2.fillOval(screenX, screenY, width, height);
-
-		g2.setColor(Color.black);
-
-		g2.fillRect(x-screenX, 0, screenX, gp.screenHeight);
-		g2.fillRect(x+platformW, 0, screenX, gp.screenHeight);
-    	
-        if(y<gp.screenHeight) {
-        	g2.setColor(new Color(144, 238, 144));
+		if(y<gp.screenHeight) {
+        	g2.setColor(new Color(85, 60, 42));
         	if(y>=gp.screenHeight/2 + height/2) {
             	g2.fillRect(x, y, platformW, platformH);
         	}
@@ -151,8 +221,40 @@ public class player {
             	g2.fillRect(x, gp.screenHeight/2 + height/2, platformW, platformH);
         	}
 		}
+
+		for(PaintSplash ps: paintSplashs){
+			boolean l = ps.draw(g2);
+
+			if(l==true){
+				paintSplashs.remove(ps);
+				break;
+			}
+		}
+
+		BufferedImage image = playerWhite;
+		if(color.get(color.size()-1).equalsIgnoreCase("red")){
+			image = playerRed;
+		}
+		else if(color.get(color.size()-1).equalsIgnoreCase("blue")){
+			image = playerBlue;
+		}
+		else if(color.get(color.size()-1).equalsIgnoreCase("yellow")){
+			image = playerYellow;
+		}
+		else{
+			image = playerWhite;
+		}
     	
-    	g2.setColor(Color.black);
+        g2.drawImage(image, screenX, screenY, width, height, null);
+    	
+        
+
+    	if(x>50){
+			g2.setColor(Color.white);
+		}
+		else{
+			g2.setColor(Color.black);
+		}
     	
     	jumpD = "Jumps Left: " + jumps;
     	

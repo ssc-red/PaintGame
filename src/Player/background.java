@@ -24,6 +24,9 @@ public class background {
 				break;
 			case 1:
 				background = ImageIO.read(new File("src/res/notebook.png"));
+				break;
+			case 2:
+				background = ImageIO.read(new File("src/res/background.jpg"));
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
