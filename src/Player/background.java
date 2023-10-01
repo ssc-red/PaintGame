@@ -37,7 +37,7 @@ public class background {
 		multiple1=(gp.player.y-gp.screenHeight)/gp.screenHeight+1;
 		multiple2=(gp.player.y-gp.screenHeight)/gp.screenHeight+1*2;
 	}
-	public void draw(Graphics2D g2) {
+	public void draw(Graphics2D g2) {		
 		g2.drawImage(background, gp.player.x, gp.player.y-gp.screenHeight*multiple1, gp.player.platformW, gp.screenHeight, null);
 		g2.drawImage(background, gp.player.x, gp.player.y-gp.screenHeight*multiple2, gp.player.platformW, gp.screenHeight, null);
 	}

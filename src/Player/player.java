@@ -1,6 +1,7 @@
 package Player;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -36,6 +37,9 @@ public class player {
 	int jumpsBegin;
     String jumpD;
     boolean released = true;
+
+	int score;
+	String scoreD;
 
 	public ArrayList<String> color = new ArrayList<String>();
 
@@ -202,14 +206,15 @@ public class player {
 			paintSplashs.clear();
     		jump = false;
     		jumps = jumpsBegin;
+			color.clear();
+			color.add("white");
+			score = 0;
     	}
-    	else if(y==gp.screenHeight/2 + height/2) {
-    		gravity = 0;
-			gp.paintM.paint.clear();
-			paintSplashs.clear();
-    		jump = false;
-    		jumps = jumpsBegin;
-    	}
+
+		//Score
+		if(score<y/10){
+			score = y/10;
+		}
     }
     public void draw(Graphics2D g2) {
 		if(y<gp.screenHeight) {
@@ -222,12 +227,18 @@ public class player {
         	}
 		}
 
+		int drawLeft = 0;
 		for(PaintSplash ps: paintSplashs){
 			boolean l = ps.draw(g2);
-
 			if(l==true){
+				drawLeft = paintSplashs.indexOf(ps);
 				paintSplashs.remove(ps);
 				break;
+			}
+		}
+		for(PaintSplash ps: paintSplashs){
+			if(paintSplashs.indexOf(ps)>=drawLeft){
+				boolean l = ps.draw(g2);
 			}
 		}
 
@@ -257,7 +268,11 @@ public class player {
 		}
     	
     	jumpD = "Jumps Left: " + jumps;
+		scoreD = "Height: " + score + "cm";
+
+		g2.setFont(new Font("PLAIN", Font.PLAIN, 15));
     	
     	g2.drawString(jumpD, 10, 20);
+		g2.drawString(scoreD, 10, 40);
     }
 }
