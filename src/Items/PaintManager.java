@@ -15,7 +15,13 @@ public class PaintManager {
 	
 	int paintsBelow = 0;
 	int paintFrequency;
+	int paints = 0;
+
 	int randForX = 0;
+
+	int superPaintsBelow = 0;
+	int superPaintsFrequency;
+	int superPaints = 0;
 	
 	public PaintManager(GamePanel gp, player player) {
 		this.gp = gp;
@@ -24,10 +30,20 @@ public class PaintManager {
 		paint = new ArrayList<Paint>();
 		
 		paintFrequency = 10; 
-		
+		superPaintsFrequency = 1;
 	}
 	public void update() {
 		paintsBelow = 0;
+		superPaintsBelow = 0;
+		if(gp.player.score>500){
+			paintFrequency = 8;
+		}
+		else if(gp.player.score>2000){
+			paintFrequency = 5;
+		}
+		else if(gp.player.score>5000){
+			paintFrequency = 2;
+		}
 		for(Paint p : paint) {
 			p.x = player.x+p.randX;
 			p.y = player.y-p.randY;
@@ -57,17 +73,32 @@ public class PaintManager {
 					p.counter = 0;
 				}
 				if(p.right<player.right && p.left>player.left && p.bottom<player.bottom && p.top>player.top) {
-					player.jumps += p.jumpsGiven;
+					switch(p.type){
+						case 1:
+							player.jumps += p.jumpsGiven;
+							paints--;
+							break;
+						case 2:
+							player.superJumps += p.jumpsGiven;
+							superPaints--;
+					}
 					player.color.add(p.color);
 					paint.remove(p);
 					break;
 				}
 			}
 			if(p.bottom>player.screenY) {
-				paintsBelow++;
+				switch(p.type){
+					case 1:
+						paintsBelow++;
+						break;
+					case 2:
+						superPaintsBelow++;
+						break;
+				}
 			}
 		}
-		while(paint.size()-paintsBelow<paintFrequency) {
+		while(paint.size()-superPaints-paintsBelow<paintFrequency) {
 			switch(randForX){
 				case 5:
 					randForX = 0;
@@ -77,33 +108,55 @@ public class PaintManager {
 					break;
 			}
 			paint.add(new Paint(1, player, randForX, paint));
+			paints++;
 			paintsBelow--;
+		}
+		while(paint.size()-paints-superPaintsBelow<superPaintsFrequency && gp.player.score>500) {
+			switch(randForX){
+				case 5:
+					randForX = 0;
+					break;
+				default:
+					randForX++;
+					break;
+			}
+			paint.add(new Paint(2, player, randForX, paint));
+			superPaints++;
+			superPaintsBelow--;
 		}
 	}
 	public void draw(Graphics2D g2) {
 		BufferedImage image;
 		for(Paint p : paint) {
 			if(p.x+p.width>0 && p.x<gp.screenWidth && p.bottom>0 && p.y<gp.screenHeight) {
-				switch(p.frame){
+				switch(p.type){
 					case 1:
-						image = p.image1;
-						break;
+						switch(p.frame){
+							case 1:
+								image = p.image1;
+								break;
+							case 2:
+								image = p.image2;
+								break;
+							case 3:
+								image = p.image3;
+								break;
+							case 4:
+								image = p.image4;
+								break;
+							case 5:
+								image = p.image5;
+								break;
+							default:
+								image = p.image1;
+						}
+						break;	
 					case 2:
-						image = p.image2;
-						break;
-					case 3:
-						image = p.image3;
-						break;
-					case 4:
-						image = p.image4;
-						break;
-					case 5:
-						image = p.image5;
+						image = p.image1;
 						break;
 					default:
 						image = p.image1;
 				}
-				
 				g2.drawImage(image, p.x, p.y, p.width, p.height, null);
 			}
 		}

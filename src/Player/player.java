@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import org.xml.sax.SAXException;
 
+import Items.PaintManager;
 import Main.GamePanel;
 import Main.KeyHandler;
 
@@ -34,16 +35,28 @@ public class player {
     boolean jump = false;
     
     public int jumps;
+	public int superJumps;
 	int jumpsBegin;
+
     String jumpD;
+	String superJumpD;
+
+	boolean superJump = false;
+	int superJumpSec;
+	int superJumpCounter = 0;
+	double superJumpSpeedDefaultX;
+	double superJumpSpeedDefaultY;
+	double superJumpSpeedX;
+	double superJumpSpeedY;
+
     boolean released = true;
 
-	int score;
+	public int score;
 	String scoreD;
 
 	public ArrayList<String> color = new ArrayList<String>();
 
-	BufferedImage playerWhite, playerRed, playerBlue, playerYellow;
+	BufferedImage playerWhite, playerRed, playerBlue, playerYellow, playerSuper;
 
 	BufferedImage redPaintSplash, redPaintSplashLeft, redPaintSplashRight;
 	BufferedImage bluePaintSplash, bluePaintSplashLeft, bluePaintSplashRight;
@@ -52,6 +65,7 @@ public class player {
 	public BufferedImage redPaintBall1, redPaintBall2, redPaintBall3, redPaintBall4, redPaintBall5;
 	public BufferedImage bluePaintBall1, bluePaintBall2, bluePaintBall3, bluePaintBall4, bluePaintBall5;
 	public BufferedImage yellowPaintBall1, yellowPaintBall2, yellowPaintBall3, yellowPaintBall4, yellowPaintBall5;
+	public BufferedImage superPaintBall1;
 
 	public ArrayList<PaintSplash> paintSplashs = new ArrayList<PaintSplash>();
     
@@ -78,8 +92,14 @@ public class player {
     	gravityIncrease = 0.12;
     	
     	//jump regulation
-    	jumpsBegin = 5;
+    	jumpsBegin = 100;
     	jumps = jumpsBegin;
+		superJumpSec = 2;
+
+		superJumpSpeedDefaultX = 1;
+		superJumpSpeedDefaultY = 2;
+		superJumpSpeedX = superJumpSpeedDefaultX;
+		superJumpSpeedY = superJumpSpeedDefaultY;
     	
     	//ball size
     	width = 60;
@@ -113,6 +133,7 @@ public class player {
 			playerRed = ImageIO.read(new File("src/res/paperballRed.png"));
 			playerBlue = ImageIO.read(new File("src/res/paperballBlue.png"));
 			playerYellow = ImageIO.read(new File("src/res/paperballYellow.png"));
+			playerSuper = ImageIO.read(new File("src/res/paperballSuper.png"));
 			
 			redPaintSplash = ImageIO.read(new File("src/res/PaintSplash/redPaintSplash.png"));
 			redPaintSplashLeft = ImageIO.read(new File("src/res/PaintSplash/redPaintSplashLeft.png"));
@@ -143,31 +164,51 @@ public class player {
 			yellowPaintBall3 = ImageIO.read(new File("src/res/paintballs/yellowPaintBall3.png"));
 			yellowPaintBall4 = ImageIO.read(new File("src/res/paintballs/yellowPaintBall4.png"));
 			yellowPaintBall5 = ImageIO.read(new File("src/res/paintballs/yellowPaintBall5.png"));
+
+			superPaintBall1 = ImageIO.read(new File("src/res/paintballs/superPaintBall1.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
     public void update() {
     	//Jump
-    	if(keyH.spacePressed==true && released==true && jumps>0) {
-    		jump = true;
-    		gravity = 0;
-    		released = false;
-    		jumps--;
-			if(keyH.rightPressed==true) {
-        		paintSplashs.add(new PaintSplash("left", gp));
-        	}
-        	else if(keyH.leftPressed==true) {
-        		paintSplashs.add(new PaintSplash("right", gp));
-        	}
-			else{
-				paintSplashs.add(new PaintSplash("down", gp));
+    	if(keyH.spacePressed==true && released==true) {
+			if(superJumps>0){
+				superJump = true;
+				gravity = 0;
+				released = false;
+				superJumps--;
+				superJumpCounter = 0;
+				if(keyH.rightPressed==true) {
+					paintSplashs.add(new PaintSplash("left", gp));
+				}
+				else if(keyH.leftPressed==true) {
+					paintSplashs.add(new PaintSplash("right", gp));
+				}
+				else{
+					paintSplashs.add(new PaintSplash("down", gp));
+				}
 			}
-			if(color.size()>1){
-				color.remove(color.get(color.size()-1));
+			else if(jumps>0){
+				jump = true;
+				gravity = 0;
+				released = false;
+				jumps--;
+				if(keyH.rightPressed==true) {
+					paintSplashs.add(new PaintSplash("left", gp));
+				}
+				else if(keyH.leftPressed==true) {
+					paintSplashs.add(new PaintSplash("right", gp));
+				}
+				else{
+					paintSplashs.add(new PaintSplash("down", gp));
+				}
+				if(color.size()>1){
+					color.remove(color.get(color.size()-1));
+				}
 			}
     	}
-    	else if(keyH.spacePressed==false) {
+    	else if(keyH.spacePressed==false && superJump==false) {
     		released = true;
     	}
     	if(jump==true) {
@@ -190,27 +231,50 @@ public class player {
         		}
     		}
     	}
+		if(superJump==true){
+			y += superJumpSpeedY;
+			superJumpSpeedY+=0.2;
+			gravity = 0;
+			if(keyH.rightPressed==true && x>leftB) {
+        		x -= superJumpSpeedX;
+        	}
+        	if(keyH.leftPressed==true && x<rightB) {
+        		x += superJumpSpeedX;
+        	}
+			superJumpSpeedX+=0.2;
+			superJumpCounter++;
+			if(superJumpSec*gp.FPS<superJumpCounter){
+				superJump=false;
+				color.remove(color.get(color.indexOf("super")));
+				superJumpSpeedX = superJumpSpeedDefaultX;
+				superJumpSpeedY = superJumpSpeedDefaultY;
+			}
+		}	
     	
     	//Gravity
-    	if(y-gravity>gp.screenHeight/2 + height/2) {
-    		y -= gravity;
-    		gravity += gravityIncrease;
-    	}
+		
+		if(y-gravity>gp.screenHeight/2 + height/2) {
+			y -= gravity;
+			gravity += gravityIncrease;
+		}
 		else if(y>gp.screenHeight/2 + height/2){
 			y -= y-gravity;
 		}
-    	else if(y<gp.screenHeight/2 + height/2){
-    		y = gp.screenHeight/2 + height/2;
-    		gravity = 0;
-			gp.paintM.paint.clear();
-			paintSplashs.clear();
-    		jump = false;
-    		jumps = jumpsBegin;
+		else if(y<gp.screenHeight/2 + height/2){
+			y = gp.screenHeight/2 + height/2;
+			gravity = 0;
+			// gp.paintM.paint.clear();
+			// paintSplashs.clear();
+			jump = false;
+			superJump = false;
+			jumps = jumpsBegin;
+			superJumps = 0;
 			color.clear();
 			color.add("white");
 			score = 0;
-    	}
-
+			gp.paintM = new PaintManager(gp, this);
+		}
+		
 		//Score
 		if(score<y/10){
 			score = y/10;
@@ -243,18 +307,34 @@ public class player {
 		}
 
 		BufferedImage image = playerWhite;
-		if(color.get(color.size()-1).equalsIgnoreCase("red")){
-			image = playerRed;
+		switch(color.get(color.size()-1)){
+			case "red":
+				image = playerRed;
+				break;
+			case "blue":
+				image = playerBlue;
+				break;
+			case "yellow":
+				image = playerYellow;
+				break;
+			case "super":
+				image = playerSuper;
+				break;
+			default:
+				image = playerWhite;
 		}
-		else if(color.get(color.size()-1).equalsIgnoreCase("blue")){
-			image = playerBlue;
-		}
-		else if(color.get(color.size()-1).equalsIgnoreCase("yellow")){
-			image = playerYellow;
-		}
-		else{
-			image = playerWhite;
-		}
+		// if(color.get(color.size()-1).equalsIgnoreCase("red")){
+		// 	image = playerRed;
+		// }
+		// else if(color.get(color.size()-1).equalsIgnoreCase("blue")){
+		// 	image = playerBlue;
+		// }
+		// else if(color.get(color.size()-1).equalsIgnoreCase("yellow")){
+		// 	image = playerYellow;
+		// }
+		// else{
+		// 	image = playerWhite;
+		// }
     	
         g2.drawImage(image, screenX, screenY, width, height, null);
     	
@@ -274,5 +354,9 @@ public class player {
     	
     	g2.drawString(jumpD, 10, 20);
 		g2.drawString(scoreD, 10, 40);
+		if(superJumps>0){
+			superJumpD = "SuperJumps Left: " + superJumps;
+			g2.drawString(superJumpD, 10, 60);
+		}
     }
 }

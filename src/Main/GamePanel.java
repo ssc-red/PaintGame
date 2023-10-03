@@ -3,6 +3,7 @@ package Main;
 import java.awt.Color;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -17,7 +18,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int screenWidth = 700; 
     public final int screenHeight = 600; 
 	
-	int FPS=60;
+	public int FPS=60;   
 
 	Thread gameThread;
 	KeyHandler keyH = new KeyHandler();
@@ -25,6 +26,12 @@ public class GamePanel extends JPanel implements Runnable{
 	public player player = new player(this, keyH);
 	public PaintManager paintM = new PaintManager(this, player);
 	public background backG = new background(this, 2);
+
+	final int titleScreen = 0;
+	boolean buttonsAdded = false;
+
+	final int playScreen = 1;
+	int gameState = 1;
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));;
@@ -38,7 +45,6 @@ public class GamePanel extends JPanel implements Runnable{
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
-
 	@Override
 	public void run() {
 		double drawInterval = 1000000000/FPS;
@@ -72,22 +78,34 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void update() {
-		backG.update();
-		player.update();
-		paintM.update();
+		switch(gameState){
+			case titleScreen:
+				break;
+			case playScreen:
+				backG.update();
+				player.update();
+				paintM.update();
+				break;
+		}
 	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
 		Graphics2D g2 = (Graphics2D)g;
-		
-		backG.draw(g2);
-		paintM.draw(g2);
-		player.draw(g2);
-		
+
+		switch(gameState){
+			case titleScreen:
+				g2.setFont(new Font("PLAIN", Font.PLAIN, 100));
+				g2.drawString("Paint Game", 90,100);
+				break;
+			case playScreen:
+				backG.draw(g2);
+				paintM.draw(g2);
+				player.draw(g2);
+				break;
+		}
 		g2.dispose();
 	}
-	
 }
 

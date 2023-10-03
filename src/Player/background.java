@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import Main.GamePanel;
 
 public class background {
-	BufferedImage background;
+	public BufferedImage background;
 	GamePanel gp;
 	int multiple1 = 1;
 	int multiple2 = 2;

@@ -1,5 +1,5 @@
 //Author: Shams Chandani
-//Start Date: September 22, 2023
+//Start Date: October 2, 2023
 
 package Main;
 
@@ -12,8 +12,7 @@ public class main {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		window.setTitle("Paint Game");
-		
-		
+
 		GamePanel gamePanel = new GamePanel();
 		window.add(gamePanel);
 		
@@ -21,7 +20,7 @@ public class main {
 		
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-		
+
 		gamePanel.startGameThread();
 	}
 }
