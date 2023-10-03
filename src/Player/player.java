@@ -92,7 +92,7 @@ public class player {
     	gravityIncrease = 0.12;
     	
     	//jump regulation
-    	jumpsBegin = 100;
+    	jumpsBegin = 5;
     	jumps = jumpsBegin;
 		superJumpSec = 2;
 
@@ -273,6 +273,12 @@ public class player {
 			color.add("white");
 			score = 0;
 			gp.paintM = new PaintManager(gp, this);
+		}
+		if(x<leftB){
+			x = leftB;
+		}
+		if(x>rightB){
+			x = rightB;
 		}
 		
 		//Score

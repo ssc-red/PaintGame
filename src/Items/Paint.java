@@ -104,7 +104,7 @@ public class Paint {
 			case 5:
 				this.randX = rand.nextInt(player.platformW/seperation)+(5*1400/seperation)-player.width*2;
 				if(this.randX>1400){
-					this.randX -= 1400-this.randX+40;
+					this.randX -= 1400-this.randX+50;
 				}
 				break;
 			}
