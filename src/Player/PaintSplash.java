@@ -25,64 +25,31 @@ public class PaintSplash {
         this.direction = direction;
         switch(this.direction){
             case "down":
-                this.width = 40;
-                this.height = 80;
                 this.x = gp.player.screenX+gp.player.width/4+(-gp.player.x);
                 this.y = gp.player.y-(gp.player.screenY);
-                switch(gp.player.color.get(gp.player.color.size()-1)){
-                    case "red":
-                        this.image = gp.player.redPaintSplash;
-                        break;
-                    case "blue":
-                        this.image = gp.player.bluePaintSplash;
-                        break;
-                    case "yellow":
-                        this.image = gp.player.yellowPaintSplash;
-                        break;
-                    default:
-                        gp.player.paintSplashs.remove(this);
-                        break;
-                }
                 break;
             case "left":
-                this.width = 64;
-                this.height = 80;
                 this.x = gp.player.screenX-gp.player.width+(-gp.player.x);
                 this.y = gp.player.y-(gp.player.screenY);
-                switch(gp.player.color.get(gp.player.color.size()-1)){
-                    case "red":
-                        this.image = gp.player.redPaintSplashLeft;
-                        break;
-                    case "blue":
-                        this.image = gp.player.bluePaintSplashLeft;
-                        break;
-                    case "yellow":
-                        this.image = gp.player.yellowPaintSplashLeft;
-                        break;
-                    default:
-                        gp.player.paintSplashs.remove(this);
-                        break;
-                }
                 break;
             case "right":
-                this.width = 64;
-                this.height = 80;
                 this.x = gp.player.screenX+gp.player.width+(-gp.player.x);
                 this.y = gp.player.y-(gp.player.screenY);
-                switch(gp.player.color.get(gp.player.color.size()-1)){
-                    case "red":
-                        this.image = gp.player.redPaintSplashRight;
-                        break;
-                    case "blue":
-                        this.image = gp.player.bluePaintSplashRight;
-                        break;
-                    case "yellow":
-                        this.image = gp.player.yellowPaintSplashRight;
-                        break;
-                    default:
-                        gp.player.paintSplashs.remove(this);
-                        break;
-                }
+        }
+        this.width = 60;
+        this.height = 60;
+        switch(gp.player.color.get(gp.player.color.size()-1)){
+            case "red":
+                this.image = gp.player.redPaintSplash1;
+                break;
+            case "blue":
+                this.image = gp.player.bluePaintSplash1;
+                break;
+            case "yellow":
+                this.image = gp.player.yellowPaintSplash1;
+                break;
+            default:
+                gp.player.paintSplashs.remove(this);
                 break;
         }
     }

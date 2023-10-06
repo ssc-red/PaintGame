@@ -103,9 +103,6 @@ public class Paint {
 				break;
 			case 5:
 				this.randX = rand.nextInt(player.platformW/seperation)+(5*1400/seperation)-player.width*2;
-				if(this.randX>1400){
-					this.randX -= 1400-this.randX+50;
-				}
 				break;
 			}
 		}
@@ -117,13 +114,13 @@ public class Paint {
 			this.jumpsGiven = 1;
 			randForX = rand.nextInt(6);
 			if(player.score<1000){
-				this.randY = (rand.nextInt(1000)+100)+player.y;
+				this.randY = (rand.nextInt(1000)+1000)+player.y;
 			}
 			else if(player.score<2000){
-				this.randY = (rand.nextInt(2000)+100)+player.y;
+				this.randY = (rand.nextInt(3000)+1000)+player.y;
 			}
 			else if(player.score<5000){
-				this.randY = (rand.nextInt(5000)+100)+player.y;
+				this.randY = (rand.nextInt(5000)+2000)+player.y;
 			}
 			switch(randForX){
 			case 0:
@@ -143,17 +140,18 @@ public class Paint {
 				break;
 			case 5:
 				this.randX = rand.nextInt(player.platformW/seperation)+(5*1400/seperation)-player.width*2;
-				if(this.randX>1400){
-					this.randX -= 1400-this.randX+50;
-				}
 				break;
 			}
 		}	
 
 		for(Paint p: paint){
-			if(p != this && p.x+p.width<this.x+this.width*2 && p.x>this.x-this.width && p.y+p.height<this.y+this.height*2 && p.y>this.y-this.height) {
-				this.randX+=40;
+			if(p != this && p.x+p.width<this.x+this.width*4 && p.x*2>this.x-this.width && p.y+p.height<this.y+this.height*4 && p.y*2>this.y-this.height) {
+				paint.remove(this);
 			}
+		}
+		if(this.randX>1400){
+			this.randX -= 1400-this.randX+50;
+			System.out.println(1400-this.randX);
 		}
 	}
 }

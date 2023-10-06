@@ -58,9 +58,9 @@ public class player {
 
 	BufferedImage playerWhite, playerRed, playerBlue, playerYellow, playerSuper;
 
-	BufferedImage redPaintSplash, redPaintSplashLeft, redPaintSplashRight;
-	BufferedImage bluePaintSplash, bluePaintSplashLeft, bluePaintSplashRight;
-	BufferedImage yellowPaintSplash, yellowPaintSplashLeft, yellowPaintSplashRight;
+	BufferedImage redPaintSplash, redPaintSplash1, redPaintSplashLeft, redPaintSplashRight;
+	BufferedImage bluePaintSplash,  bluePaintSplash1, bluePaintSplashLeft, bluePaintSplashRight;
+	BufferedImage yellowPaintSplash, yellowPaintSplash1, yellowPaintSplashLeft, yellowPaintSplashRight;
 
 	public BufferedImage redPaintBall1, redPaintBall2, redPaintBall3, redPaintBall4, redPaintBall5;
 	public BufferedImage bluePaintBall1, bluePaintBall2, bluePaintBall3, bluePaintBall4, bluePaintBall5;
@@ -96,7 +96,7 @@ public class player {
     	jumps = jumpsBegin;
 		superJumpSec = 2;
 
-		superJumpSpeedDefaultX = 1;
+		superJumpSpeedDefaultX = 2;
 		superJumpSpeedDefaultY = 2;
 		superJumpSpeedX = superJumpSpeedDefaultX;
 		superJumpSpeedY = superJumpSpeedDefaultY;
@@ -138,14 +138,17 @@ public class player {
 			redPaintSplash = ImageIO.read(new File("src/res/PaintSplash/redPaintSplash.png"));
 			redPaintSplashLeft = ImageIO.read(new File("src/res/PaintSplash/redPaintSplashLeft.png"));
 			redPaintSplashRight = ImageIO.read(new File("src/res/PaintSplash/redPaintSplashRight.png"));
+			redPaintSplash1 = ImageIO.read(new File("src/res/PaintSplash/redPaintSplash1.png"));
 
 			bluePaintSplash = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplash.png"));
 			bluePaintSplashLeft = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplashLeft.png"));
 			bluePaintSplashRight = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplashRight.png"));
+			bluePaintSplash1 = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplash1.png"));
 
 			yellowPaintSplash = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplash.png"));
 			yellowPaintSplashLeft = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplashLeft.png"));
 			yellowPaintSplashRight = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplashRight.png"));
+			yellowPaintSplash1 = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplash1.png"));
 
 			redPaintBall1 = ImageIO.read(new File("src/res/paintballs/redPaintBall1.png"));
 			redPaintBall2 = ImageIO.read(new File("src/res/paintballs/redPaintBall2.png"));
@@ -173,9 +176,9 @@ public class player {
     public void update() {
     	//Jump
     	if(keyH.spacePressed==true && released==true) {
-			if(superJumps>0){
+			if(color.get(color.size()-1).equals("super")){
 				superJump = true;
-				gravity = 0;
+				gravity = 15;
 				released = false;
 				superJumps--;
 				superJumpCounter = 0;
@@ -234,7 +237,9 @@ public class player {
 		if(superJump==true){
 			y += superJumpSpeedY;
 			superJumpSpeedY+=0.2;
-			gravity = 0;
+			// gravity = 0;
+			y -= gravity;
+			gravity -= gravityIncrease;
 			if(keyH.rightPressed==true && x>leftB) {
         		x -= superJumpSpeedX;
         	}
@@ -252,33 +257,34 @@ public class player {
 		}	
     	
     	//Gravity
-		
-		if(y-gravity>gp.screenHeight/2 + height/2) {
-			y -= gravity;
-			gravity += gravityIncrease;
-		}
-		else if(y>gp.screenHeight/2 + height/2){
-			y -= y-gravity;
-		}
-		else if(y<gp.screenHeight/2 + height/2){
-			y = gp.screenHeight/2 + height/2;
-			gravity = 0;
-			// gp.paintM.paint.clear();
-			// paintSplashs.clear();
-			jump = false;
-			superJump = false;
-			jumps = jumpsBegin;
-			superJumps = 0;
-			color.clear();
-			color.add("white");
-			score = 0;
-			gp.paintM = new PaintManager(gp, this);
-		}
-		if(x<leftB){
-			x = leftB;
-		}
-		if(x>rightB){
-			x = rightB;
+		if(superJump==false){
+			if(y-gravity>gp.screenHeight/2 + height/2) {
+				y -= gravity;
+				gravity += gravityIncrease;
+			}
+			else if(y>gp.screenHeight/2 + height/2){
+				y -= y-gravity;
+			}
+			else if(y<gp.screenHeight/2 + height/2){
+				y = gp.screenHeight/2 + height/2;
+				gravity = 0;
+				paintSplashs.clear();
+				jump = false;
+				superJump = false;
+				jumps = jumpsBegin;
+				superJumps = 0;
+				color.clear();
+				color.add("white");
+				score = 0;
+				gp.paintM = new PaintManager(gp, this);
+				gp.gameState = 0;
+			}
+			if(x<leftB){
+				x = leftB;
+			}
+			if(x>rightB){
+				x = rightB;
+			}
 		}
 		
 		//Score

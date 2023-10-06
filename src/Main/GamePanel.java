@@ -28,10 +28,11 @@ public class GamePanel extends JPanel implements Runnable{
 	public background backG = new background(this, 2);
 
 	final int titleScreen = 0;
-	boolean buttonsAdded = false;
 
 	final int playScreen = 1;
-	int gameState = 1;
+	public int gameState = 0;
+
+	int selectorX, selectorY;
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));;
@@ -39,6 +40,8 @@ public class GamePanel extends JPanel implements Runnable{
 		this.setDoubleBuffered(true);
 		this.addKeyListener(keyH);
 		this.setFocusable(true);
+		selectorX = 200;
+		selectorY = 300;
 	}
 	
 	public void startGameThread() {
@@ -80,6 +83,29 @@ public class GamePanel extends JPanel implements Runnable{
 	public void update() {
 		switch(gameState){
 			case titleScreen:
+				if(keyH.downPressed==true){
+					if(selectorY<420){
+						selectorY += 60;
+					}
+					else{
+						selectorY = 300;
+					}
+					keyH.downPressed = false;
+				}
+				if(keyH.upPressed==true){
+					if(selectorY>300){
+						selectorY -= 60;
+					}
+					else{
+						selectorY = 420;
+					}
+					keyH.upPressed = false;
+				}
+				if(keyH.enterPressed==true && selectorY==300){
+					gameState++;
+					keyH.enterPressed = false;
+				}
+				
 				break;
 			case playScreen:
 				backG.update();
@@ -96,8 +122,18 @@ public class GamePanel extends JPanel implements Runnable{
 
 		switch(gameState){
 			case titleScreen:
+				g2.drawImage(backG.background, -200, 0, player.platformW, screenHeight, null);
 				g2.setFont(new Font("PLAIN", Font.PLAIN, 100));
-				g2.drawString("Paint Game", 90,100);
+				g2.drawString("Paint Game", 90,150);
+				g2.setFont(new Font("PLAIN", Font.ROMAN_BASELINE, 50));
+				g2.setColor(Color.red);
+				g2.drawString("Start", 250,300);
+				g2.setColor(Color.blue);
+				g2.drawString("Settings", 250,360);
+				g2.setColor(Color.yellow);
+				g2.drawString("Tutorial", 250,420);
+
+				g2.drawImage(player.superPaintBall1, selectorX, selectorY-40, 40, 40, null);
 				break;
 			case playScreen:
 				backG.draw(g2);
