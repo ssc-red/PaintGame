@@ -68,6 +68,8 @@ public class player {
 	public BufferedImage superPaintBall1;
 
 	public ArrayList<PaintSplash> paintSplashs = new ArrayList<PaintSplash>();
+
+	public boolean Highscore = false;
     
     public player(GamePanel gp, KeyHandler keyH) {
     	this.gp = gp;
@@ -80,6 +82,8 @@ public class player {
         screenY = gp.screenHeight/2 - height/2;
     }
     public void getDefaultValues() {
+		paintSplashs.clear();
+		color.clear();
     	//speed
     	minSpeedY = 6;
     	minSpeedX = 3;
@@ -116,7 +120,6 @@ public class player {
         //bounderies
         rightB = gp.screenWidth/2 - width/2;
         leftB = -platformW + gp.screenWidth/2 + width/2;
-        System.out.println(rightB + " " + leftB);
         
         //hitbox
         right = gp.screenWidth/2 - width/2+width+10;
@@ -246,7 +249,7 @@ public class player {
         	if(keyH.leftPressed==true && x<rightB) {
         		x += superJumpSpeedX;
         	}
-			superJumpSpeedX+=0.2;
+			superJumpSpeedX+=0.1;
 			superJumpCounter++;
 			if(superJumpSec*gp.FPS<superJumpCounter){
 				superJump=false;
@@ -268,16 +271,15 @@ public class player {
 			else if(y<gp.screenHeight/2 + height/2){
 				y = gp.screenHeight/2 + height/2;
 				gravity = 0;
-				paintSplashs.clear();
 				jump = false;
 				superJump = false;
 				jumps = jumpsBegin;
 				superJumps = 0;
-				color.clear();
-				color.add("white");
+				Highscore = gp.highS.HighscoreCheck(score);
 				score = 0;
 				gp.paintM = new PaintManager(gp, this);
-				gp.gameState = 0;
+				// getDefaultValues();
+				gp.gameState = 2;
 			}
 			if(x<leftB){
 				x = leftB;
@@ -335,24 +337,10 @@ public class player {
 			default:
 				image = playerWhite;
 		}
-		// if(color.get(color.size()-1).equalsIgnoreCase("red")){
-		// 	image = playerRed;
-		// }
-		// else if(color.get(color.size()-1).equalsIgnoreCase("blue")){
-		// 	image = playerBlue;
-		// }
-		// else if(color.get(color.size()-1).equalsIgnoreCase("yellow")){
-		// 	image = playerYellow;
-		// }
-		// else{
-		// 	image = playerWhite;
-		// }
     	
         g2.drawImage(image, screenX, screenY, width, height, null);
     	
-        
-
-    	if(x>50){
+    	if(x>150){
 			g2.setColor(Color.white);
 		}
 		else{
@@ -362,7 +350,7 @@ public class player {
     	jumpD = "Jumps Left: " + jumps;
 		scoreD = "Height: " + score + "cm";
 
-		g2.setFont(new Font("PLAIN", Font.PLAIN, 15));
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20));
     	
     	g2.drawString(jumpD, 10, 20);
 		g2.drawString(scoreD, 10, 40);
