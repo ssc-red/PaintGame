@@ -56,11 +56,12 @@ public class player {
 
 	public ArrayList<String> color = new ArrayList<String>();
 
-	BufferedImage playerWhite, playerRed, playerBlue, playerYellow, playerSuper;
+	public BufferedImage playerWhite, playerRed, playerBlue, playerYellow, playerSuper;
 
-	BufferedImage redPaintSplash, redPaintSplash1, redPaintSplashLeft, redPaintSplashRight;
-	BufferedImage bluePaintSplash,  bluePaintSplash1, bluePaintSplashLeft, bluePaintSplashRight;
-	BufferedImage yellowPaintSplash, yellowPaintSplash1, yellowPaintSplashLeft, yellowPaintSplashRight;
+	public BufferedImage redPaintSplash1;
+	BufferedImage bluePaintSplash1;
+	BufferedImage yellowPaintSplash1;
+	BufferedImage superPaintSplash1;
 
 	public BufferedImage redPaintBall1, redPaintBall2, redPaintBall3, redPaintBall4, redPaintBall5;
 	public BufferedImage bluePaintBall1, bluePaintBall2, bluePaintBall3, bluePaintBall4, bluePaintBall5;
@@ -138,20 +139,13 @@ public class player {
 			playerYellow = ImageIO.read(new File("src/res/paperballYellow.png"));
 			playerSuper = ImageIO.read(new File("src/res/paperballSuper.png"));
 			
-			redPaintSplash = ImageIO.read(new File("src/res/PaintSplash/redPaintSplash.png"));
-			redPaintSplashLeft = ImageIO.read(new File("src/res/PaintSplash/redPaintSplashLeft.png"));
-			redPaintSplashRight = ImageIO.read(new File("src/res/PaintSplash/redPaintSplashRight.png"));
 			redPaintSplash1 = ImageIO.read(new File("src/res/PaintSplash/redPaintSplash1.png"));
 
-			bluePaintSplash = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplash.png"));
-			bluePaintSplashLeft = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplashLeft.png"));
-			bluePaintSplashRight = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplashRight.png"));
 			bluePaintSplash1 = ImageIO.read(new File("src/res/PaintSplash/bluePaintSplash1.png"));
 
-			yellowPaintSplash = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplash.png"));
-			yellowPaintSplashLeft = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplashLeft.png"));
-			yellowPaintSplashRight = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplashRight.png"));
 			yellowPaintSplash1 = ImageIO.read(new File("src/res/PaintSplash/yellowPaintSplash1.png"));
+
+			superPaintSplash1 = ImageIO.read(new File("src/res/PaintSplash/superPaintSplash.png"));
 
 			redPaintBall1 = ImageIO.read(new File("src/res/paintballs/redPaintBall1.png"));
 			redPaintBall2 = ImageIO.read(new File("src/res/paintballs/redPaintBall2.png"));
@@ -186,13 +180,13 @@ public class player {
 				superJumps--;
 				superJumpCounter = 0;
 				if(keyH.rightPressed==true) {
-					paintSplashs.add(new PaintSplash("left", gp));
+					paintSplashs.add(new PaintSplash("left", gp, 1));
 				}
 				else if(keyH.leftPressed==true) {
-					paintSplashs.add(new PaintSplash("right", gp));
+					paintSplashs.add(new PaintSplash("right", gp, 1));
 				}
 				else{
-					paintSplashs.add(new PaintSplash("down", gp));
+					paintSplashs.add(new PaintSplash("down", gp, 1));
 				}
 			}
 			else if(jumps>0){
@@ -201,13 +195,13 @@ public class player {
 				released = false;
 				jumps--;
 				if(keyH.rightPressed==true) {
-					paintSplashs.add(new PaintSplash("left", gp));
+					paintSplashs.add(new PaintSplash("left", gp, 1));
 				}
 				else if(keyH.leftPressed==true) {
-					paintSplashs.add(new PaintSplash("right", gp));
+					paintSplashs.add(new PaintSplash("right", gp, 1));
 				}
 				else{
-					paintSplashs.add(new PaintSplash("down", gp));
+					paintSplashs.add(new PaintSplash("down", gp, 1));
 				}
 				if(color.size()>1){
 					color.remove(color.get(color.size()-1));
@@ -257,6 +251,15 @@ public class player {
 				superJumpSpeedX = superJumpSpeedDefaultX;
 				superJumpSpeedY = superJumpSpeedDefaultY;
 			}
+			if(keyH.rightPressed==true) {
+				paintSplashs.add(new PaintSplash("left", gp, 2));
+			}
+			else if(keyH.leftPressed==true) {
+				paintSplashs.add(new PaintSplash("right", gp, 2));
+			}
+			else{
+				paintSplashs.add(new PaintSplash("down", gp, 2));
+			}				
 		}	
     	
     	//Gravity
@@ -278,7 +281,6 @@ public class player {
 				Highscore = gp.highS.HighscoreCheck(score);
 				score = 0;
 				gp.paintM = new PaintManager(gp, this);
-				// getDefaultValues();
 				gp.gameState = 2;
 			}
 			if(x<leftB){

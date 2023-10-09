@@ -215,10 +215,10 @@ public class GamePanel extends JPanel implements Runnable{
 					g2.setColor(Color.BLACK);
 					g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 60));
 					g2.drawString("NEW HIGHSCORE!", 67,153);
-					g2.drawString(Integer.toString(highS.highscore), screenWidth/2-g2.getFont().getSize()-3,208);
+					g2.drawString(Integer.toString(highS.highscore) + "cm", screenWidth/2-g2.getFont().getSize()-3,208);
 					g2.setColor(new Color(255, 0, 255));
 					g2.drawString("NEW HIGHSCORE!", 70,150);
-					g2.drawString(Integer.toString(highS.highscore), screenWidth/2-g2.getFont().getSize(),205);
+					g2.drawString(Integer.toString(highS.highscore) + "cm", screenWidth/2-g2.getFont().getSize(),205);
 				}
 		}
 		g2.dispose();
