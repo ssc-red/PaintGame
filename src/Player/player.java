@@ -9,6 +9,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.xml.sax.SAXException;
 
@@ -170,7 +175,7 @@ public class player {
 			e.printStackTrace();
 		}
 	}
-    public void update() {
+    public void update() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
     	//Jump
     	if(keyH.spacePressed==true && released==true) {
 			if(color.get(color.size()-1).equals("super")){
@@ -179,6 +184,11 @@ public class player {
 				released = false;
 				superJumps--;
 				superJumpCounter = 0;
+				File audioFile = new File("src/res/superSplatter.wav");
+				AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioStream);
+				clip.start();
 				if(keyH.rightPressed==true) {
 					paintSplashs.add(new PaintSplash("left", gp, 1));
 				}
@@ -194,6 +204,11 @@ public class player {
 				gravity = 0;
 				released = false;
 				jumps--;
+				File audioFile = new File("src/res/splatter.wav");
+				AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioStream);
+				clip.start();
 				if(keyH.rightPressed==true) {
 					paintSplashs.add(new PaintSplash("left", gp, 1));
 				}
@@ -352,10 +367,12 @@ public class player {
     	jumpD = "Jumps Left: " + jumps;
 		scoreD = "Height: " + score + "cm";
 
-		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20));
+		g2.setFont(gp.coolFont);
+
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 35));
     	
-    	g2.drawString(jumpD, 10, 20);
-		g2.drawString(scoreD, 10, 40);
+    	g2.drawString(jumpD, 10, 25);
+		g2.drawString(scoreD, 10, 50);
 		if(superJumps>0){
 			superJumpD = "SuperJumps Left: " + superJumps;
 			g2.drawString(superJumpD, 10, 60);
