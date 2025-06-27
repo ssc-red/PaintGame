@@ -76,8 +76,37 @@ public class player {
 	public ArrayList<PaintSplash> paintSplashs = new ArrayList<PaintSplash>();
 
 	public boolean Highscore = false;
+	File audioFile2 = new File("src/res/superSplatter.wav");
+	File audioFile1 = new File("src/res/splatter.wav");
+
+	AudioInputStream audioStream1;
+	AudioInputStream audioStream2;
+	Clip clip1;
+	Clip clip2;
     
     public player(GamePanel gp, KeyHandler keyH) {
+		try {
+			audioStream1 = AudioSystem.getAudioInputStream(audioFile1);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			audioStream2 = AudioSystem.getAudioInputStream(audioFile2);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			clip1 = AudioSystem.getClip();
+			clip1.open(audioStream1);
+			clip2 = AudioSystem.getClip();
+			clip2.open(audioStream2);
+		} catch (LineUnavailableException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
     	this.gp = gp;
     	this.keyH = keyH;
     	
@@ -184,11 +213,8 @@ public class player {
 				released = false;
 				superJumps--;
 				superJumpCounter = 0;
-				File audioFile = new File("src/res/superSplatter.wav");
-				AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-				Clip clip = AudioSystem.getClip();
-				clip.open(audioStream);
-				clip.start();
+				clip2.setFramePosition(0);
+				clip2.start();
 				if(keyH.rightPressed==true) {
 					paintSplashs.add(new PaintSplash("left", gp, 1));
 				}
@@ -204,11 +230,8 @@ public class player {
 				gravity = 0;
 				released = false;
 				jumps--;
-				File audioFile = new File("src/res/splatter.wav");
-				AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-				Clip clip = AudioSystem.getClip();
-				clip.open(audioStream);
-				clip.start();
+				clip1.setFramePosition(0);
+				clip1.start();
 				if(keyH.rightPressed==true) {
 					paintSplashs.add(new PaintSplash("left", gp, 1));
 				}
